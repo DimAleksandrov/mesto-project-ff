@@ -3,7 +3,7 @@
 import './pages/index.css';
 import { initialCards, createCard, deleteCard, likedCard, viewedImage } from './components/cards';
 import {openPopup, closePopup, closeOnBackDropClick} from './components/modal';
-export {cardTemplate, popupTypeEdit, popupTypeNewCard, placesList, popupTypeImage, setPopup, closePopupButtons, popup, popups};
+export {cardTemplate, popupTypeEdit, popupTypeNewCard, placesList, popupTypeImage, setPopup, closePopupButtons, popup};
 
 // @todo: DOM узлы
 const cardTemplate = document.querySelector('#card-template').content;
@@ -24,8 +24,8 @@ const closePopupButtons = document.querySelectorAll('.popup__close');
 
 let popup = {};
 
-function setPopup(content) {
-  popup = content;
+function setPopup(popupType) {
+  popup = popupType;
 }
 
 // @todo: Вывести карточки на страницу
@@ -50,6 +50,10 @@ const popups = [
         popup: popupTypeImage,    
     },
 ];
+
+popups.forEach((elem) => {
+  elem.popup.classList.add('popup_is-animated');
+});
 
 profileEditProfil.addEventListener('click', function () {
     popup = popupTypeEdit;
@@ -78,4 +82,3 @@ popups.forEach((elem) => {
         closeOnBackDropClick(event);
     });
 });
-

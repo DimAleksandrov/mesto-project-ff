@@ -1,6 +1,6 @@
 export { openPopup, closePopup, closeOnBackDropClick, largeImageData };
 import { createCard, deleteCard, likedCard, viewedImage } from './cards';  
-import { popupTypeEdit, popupTypeNewCard, placesList, popupTypeImage, setPopup, popup} from '../index';
+import { popupTypeEdit, popupTypeNewCard, popupTypeImage, placesList, setPopup, popup} from '../index';
   
 const popupButton = document.querySelector('.popup__button');
 
