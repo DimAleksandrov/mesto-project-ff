@@ -22,7 +22,7 @@ const popupTypeImage = document.querySelector('.popup_type_image');
 const closePopupButtons = document.querySelectorAll('.popup__close');
 
 
-let popup = {};
+let popup = '';
 
 function setPopup(popupType) {
   popup = popupType;
@@ -69,12 +69,6 @@ closePopupButtons.forEach((elem) => {
     elem.addEventListener('click', function() {
         closePopup(popup);
     });    
-});
-
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closePopup(popup);
-    }
 });
 
 popups.forEach((elem) => {

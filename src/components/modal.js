@@ -16,10 +16,18 @@ const linkInput = formElementNewPlace.elements.link;
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 
+function handleKeypress(event) {
+  if (event.key === 'Escape') {
+      closePopup(popup);
+      window.removeEventListener('keydown', handleKeypress);
+  };
+};
+
 // Функция открытия popup для редактирования
 function openPopup(popupElement) {
   popupElement.classList.add('popup_is-opened');
   popupElement.removeEventListener('click', openPopup);
+  window.addEventListener('keydown', handleKeypress);
 }
 
 // Функция закрытия popup
@@ -51,20 +59,16 @@ function defaultData() {
   linkInput.value = '';
 };
 
-nameInput.value = profileTitle.textContent;
-jobInput.value = profileDescription.textContent;
+defaultData();
 
-function handleFormSubmit(evt) {
+function handleFormSubmitProfil(evt) {
     evt.preventDefault(); 
     profileTitle.textContent = nameInput.value;
     profileDescription.textContent = jobInput.value;
     popupButton.addEventListener('click', closePopup(popupTypeEdit));
-    nameInput.value = profileTitle.textContent;
-    jobInput.value = profileDescription.textContent;
 };
-  // Прикрепляем обработчик к форме:
-  // он будет следить за событием “submit” - «отправка»
-formElement.addEventListener('submit', handleFormSubmit);
+
+formElement.addEventListener('submit', handleFormSubmitProfil);
 
 function handleFormSubmitPlace(evt) {
   evt.preventDefault();
