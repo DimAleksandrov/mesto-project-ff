@@ -1,5 +1,5 @@
 export { openPopup, closePopup, closeOnBackDropClick};
-import { createCard, deleteCard, likedCard, viewedImage } from './cards';  
+import { createCard, deleteCard, likedCard} from './card';  
 import { popupTypeEdit, popupTypeNewCard, popupTypeImage, placesList, setPopup, popup} from '../index';
   
 const popupButton = document.querySelector('.popup__button');
@@ -76,7 +76,7 @@ function handleFormSubmitPlace(evt) {
   const theFistCard = placesList.firstChild;
   newCard.name = placeNameInput.value;
   newCard.link = linkInput.value;    
-  placesList.insertBefore(createCard(newCard,deleteCard, likedCard, viewedImage), theFistCard);
+  placesList.insertBefore(createCard(newCard, deleteCard, likedCard), theFistCard);
   popupButton.addEventListener('click', closePopup(popupTypeNewCard));
   placeNameInput.value = '';
   linkInput.value = '';

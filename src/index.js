@@ -1,7 +1,8 @@
 // @todo: Темплейт карточки
 
 import './pages/index.css';
-import {initialCards, createCard, deleteCard, likedCard, viewedImage } from './components/cards';
+import {createCard, deleteCard, likedCard} from './components/card';
+import {initialCards} from './components/cards';
 import {openPopup, closePopup, closeOnBackDropClick} from './components/modal';
 export {popupTypeEdit, popupTypeNewCard, placesList, popupTypeImage, setPopup, closePopupButtons, popup};
 
@@ -28,7 +29,7 @@ function setPopup(popupType) {
   popup = popupType;
 };
 
-function largeImageData(cardImage, cardTitle) {
+function viewedImage(cardImage, cardTitle) {
     const popupImage = document.querySelector('.popup__image');
     const popupCaption = document.querySelector('.popup__caption');
     openPopup(popupTypeImage);
@@ -40,7 +41,7 @@ function largeImageData(cardImage, cardTitle) {
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (elem) {
-    const card = createCard(elem, deleteCard, likedCard, viewedImage, largeImageData);
+    const card = createCard(elem, deleteCard, likedCard, viewedImage);
     placesList.append(card);
 });
 
