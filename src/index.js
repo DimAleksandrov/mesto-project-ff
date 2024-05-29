@@ -8,33 +8,23 @@ import {openPopup, closePopup, closeOnBackDropClick, setInitialValuesPopups} fro
 // @todo: DOM узлы
 
 const placesList = document.querySelector('.places__list');
-
 const profileEditProfil = document.querySelector('.profile__edit-button');
 const profileAddProfil = document.querySelector('.profile__add-button');
-
 const popupTypeEdit = document.querySelector('.popup_type_edit');
 const popupTypeNewCard = document.querySelector('.popup_type_new-card');
 const popupTypeImage = document.querySelector('.popup_type_image');
-
 const closePopupButtons = document.querySelectorAll('.popup__close');
-
 const popupButton = document.querySelector('.popup__button');
-
 const formElement = document.forms.edit_profile;
 const formElementNewPlace = document.forms.new_place;
-
 const nameInput = formElement.elements.name;
 const jobInput = formElement.elements.description;
-
 const placeNameInput = formElementNewPlace.elements.place_name;
 const linkInput = formElementNewPlace.elements.link;
-
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
-
 const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
-
 
 let popup = '';
 

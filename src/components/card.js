@@ -8,7 +8,6 @@ function createCard(elem, deleteCard, likedCard, viewedImage) {
   const cardSrc = placesItem.querySelector('.card__title');
   const cardTitle = placesItem.querySelector('.card__title');
   const deleteButton = placesItem.querySelector('.card__delete-button');
-
   const likedButton = placesItem.querySelector('.card__like-button');
   
   cardImage.src = elem.link;
