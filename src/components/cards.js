@@ -1,6 +1,5 @@
 export { initialCards, createCard, deleteCard, likedCard, viewedImage };
-import { cardTemplate } from '../index';
-import { largeImageData } from './modal';
+// import { largeImageData } from './modal';
 
 const ArhyzImage = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg", import.meta.url);
 const ChelabinskOblastImage  = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg", import.meta.url);
@@ -9,6 +8,7 @@ const KamchatkaImage = new  URL("https://pictures.s3.yandex.net/frontend-develop
 const HolmogorImage = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg", import.meta.url);
 const BaikalImage = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg", import.meta.url);
 
+const cardTemplate = document.querySelector('#card-template').content;
 const initialCards = [
     {
       name: "Архыз",
@@ -44,7 +44,7 @@ const initialCards = [
 
 
 // @todo: Функция создания карточки
-function createCard(elem, deleteCard, likedCard, viewedImage) {
+function createCard(elem, deleteCard, likedCard, viewedImage, largeImageData) {
   const placesItem = cardTemplate.querySelector('.places__item').cloneNode(true);
   const cardImage = placesItem.querySelector('.card__image');
   const cardSrc = placesItem.querySelector('.card__title');
@@ -66,7 +66,7 @@ function createCard(elem, deleteCard, likedCard, viewedImage) {
   });
 
   cardImage.addEventListener('click', function() {
-    viewedImage(cardImage, cardTitle);
+    viewedImage(cardImage, cardTitle, largeImageData);
   });
 
   return placesItem;
@@ -81,6 +81,6 @@ function likedCard(likedButton) {
   likedButton.classList.toggle('card__like-button_is-active');
 };
 
-function viewedImage(cardImage, cardTitle) {
+function viewedImage(cardImage, cardTitle, largeImageData) {
   largeImageData(cardImage, cardTitle);
 };

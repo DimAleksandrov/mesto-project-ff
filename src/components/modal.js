@@ -1,4 +1,4 @@
-export { openPopup, closePopup, closeOnBackDropClick, largeImageData };
+export { openPopup, closePopup, closeOnBackDropClick};
 import { createCard, deleteCard, likedCard, viewedImage } from './cards';  
 import { popupTypeEdit, popupTypeNewCard, popupTypeImage, placesList, setPopup, popup} from '../index';
   
@@ -84,12 +84,12 @@ function handleFormSubmitPlace(evt) {
 
 formElementNewPlace.addEventListener('submit', handleFormSubmitPlace);  
 
-function largeImageData(cardImage, cardTitle) {
-  const popupImage = document.querySelector('.popup__image');
-  const popupCaption = document.querySelector('.popup__caption');
-  openPopup(popupTypeImage);
+// function largeImageData(cardImage, cardTitle) {
+//   const popupImage = document.querySelector('.popup__image');
+//   const popupCaption = document.querySelector('.popup__caption');
+//   openPopup(popupTypeImage);
   
-  popupImage.src = cardImage.src;
-  popupCaption.textContent = cardTitle.textContent;
-  setPopup(popupTypeImage);
-};
+//   popupImage.src = cardImage.src;
+//   popupCaption.textContent = cardTitle.textContent;
+//   setPopup(popupTypeImage);
+// };

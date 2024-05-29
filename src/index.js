@@ -1,12 +1,12 @@
 // @todo: Темплейт карточки
 
 import './pages/index.css';
-import { initialCards, createCard, deleteCard, likedCard, viewedImage } from './components/cards';
+import {initialCards, createCard, deleteCard, likedCard, viewedImage } from './components/cards';
 import {openPopup, closePopup, closeOnBackDropClick} from './components/modal';
-export {cardTemplate, popupTypeEdit, popupTypeNewCard, placesList, popupTypeImage, setPopup, closePopupButtons, popup};
+export {popupTypeEdit, popupTypeNewCard, placesList, popupTypeImage, setPopup, closePopupButtons, popup};
 
 // @todo: DOM узлы
-const cardTemplate = document.querySelector('#card-template').content;
+
 const placesList = document.querySelector('.places__list');
 
 const profileTitle = document.querySelector('.profile__title');
@@ -26,11 +26,21 @@ let popup = '';
 
 function setPopup(popupType) {
   popup = popupType;
-}
+};
+
+function largeImageData(cardImage, cardTitle) {
+    const popupImage = document.querySelector('.popup__image');
+    const popupCaption = document.querySelector('.popup__caption');
+    openPopup(popupTypeImage);
+    popupImage.src = cardImage.src;
+    popupCaption.textContent = cardTitle.textContent;
+    setPopup(popupTypeImage);
+};
+
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (elem) {
-    const card = createCard(elem, deleteCard, likedCard, viewedImage);
+    const card = createCard(elem, deleteCard, likedCard, viewedImage, largeImageData);
     placesList.append(card);
 });
 
