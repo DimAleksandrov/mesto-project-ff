@@ -1,39 +1,23 @@
-export { openPopup, closePopup, closeOnBackDropClick};
-import { createCard, deleteCard, likedCard} from './card';  
-import { popupTypeEdit, popupTypeNewCard, popupTypeImage, placesList, setPopup, popup} from '../index';
+export { openPopup, closePopup, closeOnBackDropClick };
   
-const popupButton = document.querySelector('.popup__button');
-
-const formElement = document.forms.edit_profile;
-const formElementNewPlace = document.forms.new_place;
-
-const nameInput = formElement.elements.name;
-const jobInput = formElement.elements.description;
-
-const placeNameInput = formElementNewPlace.elements.place_name;
-const linkInput = formElementNewPlace.elements.link;
-
-const profileTitle = document.querySelector('.profile__title');
-const profileDescription = document.querySelector('.profile__description');
-
-function handleKeypress(event) {
-  if (event.key === 'Escape') {
-      closePopup(popup);
-      window.removeEventListener('keydown', handleKeypress);
-  };
-};
+function closeByEscape(evt) {
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_is-opened'); //<==нашли открытый попап
+    closePopup(openedPopup);// <== закрыли попап с помощью функции `closePopup` ==
+  }
+}
 
 // Функция открытия popup для редактирования
-function openPopup(popupElement) {
+function openPopup(popupElement, setInitialValues) {
+  setInitialValues();
   popupElement.classList.add('popup_is-opened');
-  popupElement.removeEventListener('click', openPopup);
-  window.addEventListener('keydown', handleKeypress);
+  document.addEventListener('keydown', closeByEscape); 
 }
 
 // Функция закрытия popup
 function closePopup(popupElement) {
   popupElement.classList.remove('popup_is-opened');
-  defaultData();
+  document.removeEventListener('keydown', closeByEscape);
 }
 
 //Функция закрытия popup при клике на overlay
@@ -47,49 +31,5 @@ function closeOnBackDropClick({currentTarget, target }) {
   } else {
       isClickedOnBackDrop = false;
   };
-  if (isClickedOnBackDrop) {
-      closePopup(popup);
-  }   
-}
-
-function defaultData() {
-  nameInput.value = profileTitle.textContent;
-  jobInput.value = profileDescription.textContent;
-  placeNameInput.value = '';
-  linkInput.value = '';
-};
-
-defaultData();
-
-function handleFormSubmitProfil(evt) {
-    evt.preventDefault(); 
-    profileTitle.textContent = nameInput.value;
-    profileDescription.textContent = jobInput.value;
-    popupButton.addEventListener('click', closePopup(popupTypeEdit));
-};
-
-formElement.addEventListener('submit', handleFormSubmitProfil);
-
-function handleFormSubmitPlace(evt) {
-  evt.preventDefault();
-  const newCard = {};
-  const theFistCard = placesList.firstChild;
-  newCard.name = placeNameInput.value;
-  newCard.link = linkInput.value;    
-  placesList.insertBefore(createCard(newCard, deleteCard, likedCard), theFistCard);
-  popupButton.addEventListener('click', closePopup(popupTypeNewCard));
-  placeNameInput.value = '';
-  linkInput.value = '';
-};
-
-formElementNewPlace.addEventListener('submit', handleFormSubmitPlace);  
-
-// function largeImageData(cardImage, cardTitle) {
-//   const popupImage = document.querySelector('.popup__image');
-//   const popupCaption = document.querySelector('.popup__caption');
-//   openPopup(popupTypeImage);
-  
-//   popupImage.src = cardImage.src;
-//   popupCaption.textContent = cardTitle.textContent;
-//   setPopup(popupTypeImage);
-// };
+  return isClickedOnBackDrop;
+  };
