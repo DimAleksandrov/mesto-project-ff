@@ -3,7 +3,7 @@
 import './pages/index.css';
 import {createCard, deleteCard, likedCard} from './components/card';
 import {initialCards} from './components/cards';
-import {openPopup, closePopup, closeOnBackDropClick, setInitialValuesPopups} from './components/modal';
+import {openPopup, closePopup, closeOnBackDropClick} from './components/modal';
 
 // @todo: DOM узлы
 
@@ -32,6 +32,7 @@ function viewedImage(cardImage, cardTitle) {
     popup = popupTypeImage;
     openPopup(popupTypeImage);
     popupImage.src = cardImage.src;
+    popupImage.alt = cardImage.alt;
     popupCaption.textContent = cardTitle.textContent;
 };
 
@@ -64,12 +65,14 @@ popups.forEach((elem) => {
 
 profileEditProfil.addEventListener('click', function () {
     popup = popupTypeEdit;
-    openPopup(popup, setInitialValues);
+    openPopup(popup);
+    setInitialValues();
 });
 
 profileAddProfil.addEventListener('click', function () {
     popup = popupTypeNewCard;
-    openPopup(popup, setInitialValues);
+    openPopup(popup);
+    setInitialValues();
 });
 
 closePopupButtons.forEach(button => {
@@ -99,7 +102,7 @@ function handleFormSubmitProfil(evt) {
     evt.preventDefault(); 
     profileTitle.textContent = nameInput.value;
     profileDescription.textContent = jobInput.value;
-    popupButton.addEventListener('click', closePopup(popupTypeEdit));
+    closePopup(popupTypeEdit);
 };
 
 formElement.addEventListener('submit', handleFormSubmitProfil);
@@ -111,8 +114,8 @@ function handleFormSubmitPlace(evt) {
     newCard.name = placeNameInput.value;
     newCard.alt = newCard;
     newCard.link = linkInput.value;    
-    placesList.insertBefore(createCard(newCard, deleteCard, likedCard), theFistCard);
-    popupButton.addEventListener('click', closePopup(popupTypeNewCard));
+    placesList.insertBefore(createCard(newCard, deleteCard, likedCard, viewedImage), theFistCard);
+    closePopup(popupTypeNewCard);
     evt.target.reset();
 };
 

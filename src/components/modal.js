@@ -8,8 +8,7 @@ function closeByEscape(evt) {
 }
 
 // Функция открытия popup для редактирования
-function openPopup(popupElement, setInitialValues) {
-  setInitialValues();
+function openPopup(popupElement) {
   popupElement.classList.add('popup_is-opened');
   document.addEventListener('keydown', closeByEscape); 
 }
