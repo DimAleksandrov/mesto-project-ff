@@ -55,6 +55,28 @@
       </form>
     </div>
   </div>
+
+  <div class="popup popup_type_avatar">
+    <div class="popup__content">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Обновить аватар</h3>
+      <form class="popup__form" name="new_avatar" novalidate>
+        <!-- <input type="text" name="place_name" class="popup__input popup__input_type_card-name" id="place_name-input"
+          minlength="2" 
+          maxlength="200" 
+          pattern="^[a-zA-Zа-яА-яЁё\s\-]+$"
+          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+          placeholder="Название" required>
+        <span class="popup__input-error place_name-input-error"></span> -->
+        <input type="url" name="avatar_link" class="popup__input popup__input_type_avatar_url" id="avatar_link-input"
+          minlength="2" 
+          placeholder="Ссылка на автар" required>
+        <span class="popup__input-error avatar_link-input-error"></span>
+        <button type="submit" class="button popup__button">Сохранить</button>
+      </form>
+    </div>
+  </div>
+
   <div class="popup popup_type_new-card">
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
@@ -91,7 +113,10 @@
     <div class="card__description">
       <h2 class="card__title">
       </h2>
-      <button type="button" class="card__like-button"></button>
+      <div class="card__like">
+        <button type="button" class="card__like-button"></button>
+        <P class="card__like-quantity"></P>
+      </div>
     </div>
   </li>
 </template>

@@ -9,6 +9,41 @@
   margin: 0 29px 0 0;
 }
 
+/* .profile__image:hover {
+  opacity: 0.2;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+} */
+
+.profile__image:before {
+  content: '';
+  position: absolute;
+  background: url('../../../images/Vector.svg') center no-repeat;
+  width: 26px;
+  height: 26px;
+  inset-block-start: 85px;
+  inset-inline-start: 50px;
+  opacity: 0;
+  z-index: 1;
+}
+
+.profile__image:after {
+  content: '';
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  width: 120px;
+  inset-block-start: 0px;
+  inset-block-end: 0px;
+  opacity: 0;
+}
+
+.profile__image:hover:before,
+.profile__image:hover:after {
+  opacity: 1;
+}
+
+
 @media screen and (max-width: 740px) {
   .profile__image {
     margin: 0 10px 0 0;
