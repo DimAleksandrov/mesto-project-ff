@@ -9,13 +9,6 @@
   margin: 0 29px 0 0;
 }
 
-/* .profile__image:hover {
-  opacity: 0.2;
-  cursor: pointer;
-  position: relative;
-  z-index: 0;
-} */
-
 .profile__image:before {
   content: '';
   position: absolute;

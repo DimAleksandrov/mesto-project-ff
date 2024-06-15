@@ -2,7 +2,6 @@
 
 import './pages/index.css';
 import {createCard, deleteCard, likedCard} from './components/card';
-// import {initialCards} from './components/cards';
 import {openPopup, closePopup, closeOnBackDropClick} from './components/modal';
 import {enableValidation, clearValidation} from './components/validation'
 
@@ -52,8 +51,6 @@ const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 const cardImage = document.querySelector('.card__image');
 
-
-
 const popups = [
     {
         openButton: profileEditProfil,
@@ -76,21 +73,7 @@ const popups = [
 let popup = '';
 let newCardStatus = false;
 let profilImageLink = '';
-let profilId = '';
-
-// const getUserInformation = ((resolve) => {
-//     fetch(`${config.baseUrl}/users/me`, {
-//             method:'GET',
-//             headers: config.headers, 
-//         })
-//             .then(res => res.json())
-//             .then((result) => {
-//                 resolve(result)
-//         })
-//         .catch((err) => {
-//             console.log('Ошибка. Запрос не выполнен: ', err);
-//         });
-// })
+let profileId = '';
 
 const getUserInformation = new Promise((resolve) => {
     fetch(`${config.baseUrl}/users/me`, {
@@ -101,39 +84,6 @@ const getUserInformation = new Promise((resolve) => {
                 resolve(result);
             })
 })
-
-
-// function getUserInformation() {
-//     fetch(`${webSite}/users/me`, {
-//         method:'GET',
-//         headers: {
-//          authorization: token
-//         }
-//       })
-//         .then(res => res.json())
-//         .then((result) => {
-//             profileTitle.textContent = result.name;
-//             profileDescription.textContent = result.about;
-//             profilImage.style.backgroundImage = `url(${result.avatar})`;
-//         })
-//         .catch((err) => {
-//             console.log('Ошибка. Запрос не выполнен: ', err);
-//         });
-// }
-
-// const getCards = ((resolve) => {
-//     fetch(`${config.baseUrl}/cards`, {
-//         method:'GET',
-//         headers: config.headers,
-//       })
-//         .then(res => res.json())
-//         .then((result) => {
-//             resolve(result);
-//         })
-//         .catch((err) => {
-//             console.log('Ошибка. Запрос не выполнен: ', err);
-//         });
-// })
 
 const getCards = new Promise((resolve) => {
     fetch(`${config.baseUrl}/cards`, {
@@ -164,16 +114,13 @@ function createNewCard(saveButton) {
     .then ((result) => {
         console.log('resultCreateNewCard = ', result);
         const theFistCard = placesList.firstChild;
-        placesList.insertBefore(createCard(result, deleteCard, likedCard, viewedImage, profileTitle, config), theFistCard);
+        placesList.insertBefore(createCard(result, deleteCard, likedCard, viewedImage, profileId, config), theFistCard);
     })
     .finally (()=>{
         closePopup(popupTypeNewCard);
         saveButton.textContent = 'Сохранить';
     })
-    
 } 
-
-
 
 // function getCards() {
 //     fetch(`${webSite}/cards`, {
@@ -193,6 +140,7 @@ function createNewCard(saveButton) {
 //         });
 // }
 //const promises = [getUserInformation, getCards]
+
 function loadData () {
     Promise.all([getUserInformation, getCards
         // fetch(`${config.baseUrl}/users/me`, {
@@ -213,7 +161,7 @@ function loadData () {
         profileTitle.textContent = dataUserInformation.name;
         profileDescription.textContent = dataUserInformation.about;
         profilImage.style.backgroundImage = `url(${dataUserInformation.avatar})`;
-        profilId = dataUserInformation._id;
+        profileId = dataUserInformation._id;
         
 
         console.log('dataCards=', dataCards);
@@ -274,12 +222,7 @@ function editAvatar(saveButton) {
 
 function createCards(cardsArr) {
     cardsArr.forEach(function (elem) {
-        // if (elem.owner.name === profileTitle.textContent) {
-        //     newCardStatus = true;
-        // } else {
-        //     newCardStatus = false;
-        // } 
-        const card = createCard(elem, deleteCard, likedCard, viewedImage, profilId, config);
+        const card = createCard(elem, deleteCard, likedCard, viewedImage, profileId, config);
         placesList.append(card);
     });
 }
@@ -333,9 +276,6 @@ function viewedImage(cardImage, cardTitle) {
     popupImage.alt = cardImage.alt;
     popupCaption.textContent = cardTitle.textContent;
 };
-
-// getUserInformation();
-// getCards();
 
 popups.forEach((elem) => {
   elem.popup.classList.add('popup_is-animated');
