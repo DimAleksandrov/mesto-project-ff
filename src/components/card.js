@@ -12,7 +12,6 @@ function createCard(card, deleteCard, likedCard, viewedImage, profilId, config) 
   const deleteButton = placesItem.querySelector('.card__delete-button');
   const likedButton = placesItem.querySelector('.card__like-button');
   const likeQuntity = placesItem.querySelector('.card__like-quantity');
-
   
   cardImage.src = card.link;
   cardImage.alt = card.name;
@@ -33,7 +32,6 @@ function createCard(card, deleteCard, likedCard, viewedImage, profilId, config) 
 
   deleteButton.addEventListener('click', function() {
     deleteCard(placesItem, card, config);
-
   });
 
   likedButton.addEventListener('click', function() {
@@ -65,14 +63,12 @@ function deleteCard(placesItem, card, config) {
 };
 
 function likedCard(likedButton, likeQuntity, card, config) {
-
   likedButton.classList.toggle('card__like-button_is-active');
   if (likedButton.classList.contains('card__like-button_is-active')) {
     addLikeOnServer(card.likes, likeQuntity, card._id, config)
     .then((result) => {
       likeQuntity.textContent = result.likes.length;
   });
-    
   } else {
     deleteLikeOnServer(card._id, likeQuntity, config)
     .then((result) => {

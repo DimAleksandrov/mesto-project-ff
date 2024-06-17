@@ -49,7 +49,6 @@ const getCards = new Promise((resolve) => {
 
 function loadData() {
   return Promise.all([getUserInformation, getCards])
-  //.then(handleResponse)
   .catch(handleError)
 }
 
