@@ -7,7 +7,6 @@ import {config, loadData, createNewCard, editProfil, editAvatar, checkImagelink}
 // const token = '94a91796-fbdf-4e14-9e38-9ff505a2733d';
 // const webSite = 'https://nomoreparties.co/v1/wff-cohort-16';
 
-
 const validationConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
@@ -51,7 +50,6 @@ loadData().then(([dataUserInformation, dataCards]) => {
     profileId = dataUserInformation._id;
     createCards(dataCards);
 });
-
 
 function createCards(cardsArr) {
     cardsArr.forEach(function (elemCardsArr) {
