@@ -19,3 +19,7 @@
   line-height: 15.73px;
   text-align: center;
 }
+
+.popup__content_delete-card {
+  min-height: auto;
+}

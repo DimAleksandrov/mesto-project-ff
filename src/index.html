@@ -55,19 +55,11 @@
       </form>
     </div>
   </div>
-
   <div class="popup popup_type_avatar">
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Обновить аватар</h3>
       <form class="popup__form" name="new_avatar" novalidate>
-        <!-- <input type="text" name="place_name" class="popup__input popup__input_type_card-name" id="place_name-input"
-          minlength="2" 
-          maxlength="200" 
-          pattern="^[a-zA-Zа-яА-яЁё\s\-]+$"
-          data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
-          placeholder="Название" required>
-        <span class="popup__input-error place_name-input-error"></span> -->
         <input type="url" name="avatar_link" class="popup__input popup__input_type_avatar_url" id="avatar_link-input"
           minlength="2" 
           placeholder="Ссылка на автар" required>
@@ -76,7 +68,6 @@
       </form>
     </div>
   </div>
-
   <div class="popup popup_type_new-card">
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
@@ -84,7 +75,7 @@
       <form class="popup__form" name="new_place" novalidate>
         <input type="text" name="place_name" class="popup__input popup__input_type_card-name" id="place_name-input"
           minlength="2" 
-          maxlength="200" 
+          maxlength="30" 
           pattern="^[a-zA-Zа-яА-яЁё\s\-]+$"
           data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
           placeholder="Название" required>
@@ -97,6 +88,15 @@
       </form>
     </div>
   </div>
+
+  <div class="popup popup_type_delete-card">
+    <div class="popup__content popup__content_delete-card">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Вы уверены?</h3>
+        <button type="submit" class="button popup__button">Да</button>
+    </div>
+  </div>
+
   <div class="popup popup_type_image">
     <div class="popup__content popup__content_content_image">
       <button type="button" class="popup__close"></button>

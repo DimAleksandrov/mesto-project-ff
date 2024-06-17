@@ -1,20 +1,12 @@
-// @todo: Темплейт карточки
-
 import './pages/index.css';
 import {createCard, deleteCard, likedCard} from './components/card';
 import {openPopup, closePopup, closeOnBackDropClick} from './components/modal';
-import {enableValidation, clearValidation} from './components/validation'
+import {enableValidation, clearValidation} from './components/validation';
+import {config, loadData, createNewCard, editProfil, editAvatar, checkImagelink} from './components/api';
 
 // const token = '94a91796-fbdf-4e14-9e38-9ff505a2733d';
 // const webSite = 'https://nomoreparties.co/v1/wff-cohort-16';
 
-const config = {
-    baseUrl: 'https://nomoreparties.co/v1/wff-cohort-16',
-    headers: {
-        authorization: '94a91796-fbdf-4e14-9e38-9ff505a2733d',
-        'Content-Type': 'application/json',
-    }
-}
 
 const validationConfig = {
     formSelector: '.popup__form',
@@ -28,12 +20,17 @@ const validationConfig = {
 const placesList = document.querySelector('.places__list');
 const profileEditProfil = document.querySelector('.profile__edit-button');
 const profileAddPlace = document.querySelector('.profile__add-button');
+
+// const cardDeleteButton = document.querySelector('.card__delete-button');
+
 const popupTypeEdit = document.querySelector('.popup_type_edit');
 const popupTypeAvatar = document.querySelector('.popup_type_avatar');
 const popupTypeNewCard = document.querySelector('.popup_type_new-card');
+
+const popupTypeDeleteCard = document.querySelector('.popup_type_delete-card');
+
 const popupTypeImage = document.querySelector('.popup_type_image');
 const closePopupButtons = document.querySelectorAll('.popup__close');
-const popupButtons = document.querySelectorAll('.popup__button');
 const formElement = document.forms.edit_profile;
 const formElementAvatar = document.forms.new_avatar;
 const formElementNewPlace = document.forms.new_place;
@@ -51,178 +48,42 @@ const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 const cardImage = document.querySelector('.card__image');
 
-const popups = [
-    {
-        openButton: profileEditProfil,
-        popup: popupTypeEdit,    
-    },
-    {
-        openButton: profilImage,
-        popup: popupTypeAvatar,    
-    },
-    {
-        openButton: profileAddPlace,
-        popup: popupTypeNewCard,    
-    },  
-    {
-        openButton: cardImage,
-        popup: popupTypeImage,    
-    },
-];
+const popups = Array.from(document.querySelectorAll('.popup'));
+// [
+//     {
+//         openButton: profileEditProfil,
+//         popup: popupTypeEdit,    
+//     },
+//     {
+//         openButton: profilImage,
+//         popup: popupTypeAvatar,    
+//     },
+//     {
+//         openButton: profileAddPlace,
+//         popup: popupTypeNewCard,    
+//     },  
+//     {
+//         openButton: cardImage,
+//         popup: popupTypeImage,    
+//     },
+// ];
 
 let popup = '';
-let newCardStatus = false;
 let profilImageLink = '';
-let profileId = '';
+let profileId = ''; 
 
-const getUserInformation = new Promise((resolve) => {
-    fetch(`${config.baseUrl}/users/me`, {
-            headers: config.headers, 
-        })
-            .then(res => res.json())
-            .then((result) => {
-                resolve(result);
-            })
-})
-
-const getCards = new Promise((resolve) => {
-    fetch(`${config.baseUrl}/cards`, {
-        headers: config.headers,
-      })
-        .then(res => res.json())
-        .then((result) => {
-            resolve(result);
-        })
-})
-
-function createNewCard(saveButton) {
-    fetch(`${config.baseUrl}/cards`, {
-        method: 'POST',
-        headers: config.headers,
-        body: JSON.stringify({
-            name: placeNameInput.value,
-            link: linkInput.value,
-        })
-    })
-    .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then ((result) => {
-        console.log('resultCreateNewCard = ', result);
-        const theFistCard = placesList.firstChild;
-        placesList.insertBefore(createCard(result, deleteCard, likedCard, viewedImage, profileId, config), theFistCard);
-    })
-    .finally (()=>{
-        closePopup(popupTypeNewCard);
-        saveButton.textContent = 'Сохранить';
-    })
-} 
-
-// function getCards() {
-//     fetch(`${webSite}/cards`, {
-//         method:'GET',
-//         headers: {
-//          authorization: token
-//         }
-//       })
-//         .then(res => res.json())
-//         .then((result) => {
-//             console.log(result);
-//             const initialCards = Array.from(JSON.parse(JSON.stringify(result)));
-//             createCards(initialCards);
-//         })
-//         .catch((err) => {
-//             console.log('Ошибка. Запрос не выполнен: ', err);
-//         });
-// }
-//const promises = [getUserInformation, getCards]
-
-function loadData () {
-    Promise.all([getUserInformation, getCards
-        // fetch(`${config.baseUrl}/users/me`, {
-        //     method:'GET',
-        //     headers: config.headers, 
-        // })
-        // .then(res => res.json()),
-            
-        // fetch(`${config.baseUrl}/cards`, {
-        //     method:'GET',
-        //     headers: config.headers,
-        //     })
-        // .then(res => res.json()),
-    ])
-    .then(([dataUserInformation, dataCards]) => {
-        console.log('dataUserInformation=', dataUserInformation);
-
-        profileTitle.textContent = dataUserInformation.name;
-        profileDescription.textContent = dataUserInformation.about;
-        profilImage.style.backgroundImage = `url(${dataUserInformation.avatar})`;
-        profileId = dataUserInformation._id;
-        
-
-        console.log('dataCards=', dataCards);
-        createCards(dataCards);
-    });
-} 
-
-loadData();
-
-function editProfil(saveButton) {
-    fetch(`${config.baseUrl}/users/me`, {
-        method: 'PATCH',
-        headers: config.headers,
-        body: JSON.stringify({
-            name: profileTitle.textContent,
-            about: profileDescription.textContent
-        })
-    })
-    .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .finally (()=>{
-        closePopup(popupTypeEdit);
-        saveButton.textContent = 'Сохранить';
-    })
-};  
-
-//PATCH https://nomoreparties.co/v1/cohortId/users/me/avatar
-function editAvatar(saveButton) {
-    fetch(`${config.baseUrl}/users/me/avatar`, {
-        method: 'PATCH',
-        headers: config.headers,
-        body: JSON.stringify({
-            avatar: profilImageLink
-        })
-    })
-    .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then ((result) => {
-        console.log('profilImage.style.backgroundImage = ', result.avatar);
-        profilImage.style.backgroundImage = `url(${result.avatar})`;
-    })
-    .finally (()=>{
-        closePopup(popupTypeAvatar);
-        saveButton.textContent = 'Сохранить';
-    })
-};
+loadData().then(([dataUserInformation, dataCards]) => {
+    profileTitle.textContent = dataUserInformation.name;
+    profileDescription.textContent = dataUserInformation.about;
+    profilImage.style.backgroundImage = `url(${dataUserInformation.avatar})`;
+    profileId = dataUserInformation._id;
+    createCards(dataCards);
+});
 
 
 function createCards(cardsArr) {
-    cardsArr.forEach(function (elem) {
-        const card = createCard(elem, deleteCard, likedCard, viewedImage, profileId, config);
+    cardsArr.forEach(function (elemCardsArr) {
+        const card = createCard(elemCardsArr, deleteCard, likedCard, viewedImage, profileId, config);
         placesList.append(card);
     });
 }
@@ -241,8 +102,11 @@ function handleFormSubmitProfil(evt) {
     popupButton.textContent = 'Сохранение...';
     profileTitle.textContent = nameInput.value;
     profileDescription.textContent = jobInput.value;
-    //closePopup(popupTypeEdit);
-    editProfil(popupButton);
+    editProfil(profileTitle, profileDescription)
+    .finally (()=>{
+        closePopup(popupTypeEdit);
+        popupButton.textContent = 'Сохранить';
+    });
 };
 
 function handleFormSubmitAvatar(evt) {
@@ -250,22 +114,34 @@ function handleFormSubmitAvatar(evt) {
     const popupButton = popupTypeAvatar.querySelector('.popup__button');
     popupButton.textContent = 'Сохранение...';
     profilImageLink = avatarUrlInput.value;
-    editAvatar(popupButton);
+    // checkImagelink(profilImageLink)
+    // .then((result) => {
+    //     console.log(result.ok);
+    // });
+    editAvatar(profilImageLink).then((dataProfilImageLink) => {
+        console.log('profilImage.style.backgroundImage = ', dataProfilImageLink.avatar);
+        profilImage.style.backgroundImage = `url(${dataProfilImageLink.avatar})`;
+    })
+    .finally (()=>{
+        closePopup(popupTypeAvatar);
+        popupButton.textContent = 'Сохранить';
+    });
 };
 
 function handleFormSubmitPlace(evt) {
     evt.preventDefault();
-    // const newCard = {};
-    // //const theFistCard = placesList.firstChild;
-    // newCard.name = placeNameInput.value;
-    // newCard.alt = newCard;
-    // newCard.link = linkInput.value;
     const popupButton = popupTypeNewCard.querySelector('.popup__button');
     popupButton.textContent = 'Сохранение...';
-    newCardStatus = true;
-    //closePopup(popupTypeNewCard);
-    createNewCard(popupButton);
-    // placesList.insertBefore(createCard(newCard, deleteCard, likedCard, viewedImage, newCardStatus, config), theFistCard);
+    createNewCard(placeNameInput, linkInput)
+    .then ((dataNewCard) => {
+        console.log('resultCreateNewCard = ', dataNewCard);
+        const theFistCard = placesList.firstChild;
+        placesList.insertBefore(createCard(dataNewCard, deleteCard, likedCard, viewedImage, profileId, config), theFistCard);
+    })
+    .finally (()=>{
+        closePopup(popupTypeNewCard);
+        popupButton.textContent = 'Сохранить';
+    });
     evt.target.reset();
 };
 
@@ -278,7 +154,7 @@ function viewedImage(cardImage, cardTitle) {
 };
 
 popups.forEach((elem) => {
-  elem.popup.classList.add('popup_is-animated');
+  elem.classList.add('popup_is-animated');
 });
 
 profileEditProfil.addEventListener('click', function () {
@@ -310,9 +186,9 @@ closePopupButtons.forEach(button => {
 });
 
 popups.forEach((elem) => {
-    elem.popup.addEventListener('click', function(event) {
+    elem.addEventListener('click', function(event) {
         if (closeOnBackDropClick(event)) {
-            closePopup(elem.popup);
+            closePopup(elem);
         }
     });
 });
