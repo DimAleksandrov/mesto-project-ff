@@ -70,21 +70,13 @@ function likedCard(likedButton, likeQuntity, card, config) {
   if (likedButton.classList.contains('card__like-button_is-active')) {
     addLikeOnServer(card.likes, likeQuntity, card._id, config)
     .then((result) => {
-      console.log('like=', result);
       likeQuntity.textContent = result.likes.length;
-  })
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-    });
+  });
     
   } else {
     deleteLikeOnServer(card._id, likeQuntity, config)
     .then((result) => {
-      console.log('dislike=', result);
       likeQuntity.textContent = result.likes.length;
-  })
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-    });
+  });
   }
 };

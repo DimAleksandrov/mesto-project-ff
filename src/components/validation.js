@@ -72,7 +72,6 @@ function enableValidation(validatSettings) {
   });
 };
 
-
 // clearValidation(profileForm, validationConfig);
 function clearValidation(formElement, validatSettings ) {
   const inputList = Array.from(formElement.querySelectorAll(validatSettings.inputSelector));

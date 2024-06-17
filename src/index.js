@@ -119,7 +119,6 @@ function handleFormSubmitAvatar(evt) {
     //     console.log(result.ok);
     // });
     editAvatar(profilImageLink).then((dataProfilImageLink) => {
-        console.log('profilImage.style.backgroundImage = ', dataProfilImageLink.avatar);
         profilImage.style.backgroundImage = `url(${dataProfilImageLink.avatar})`;
     })
     .finally (()=>{
@@ -134,7 +133,6 @@ function handleFormSubmitPlace(evt) {
     popupButton.textContent = 'Сохранение...';
     createNewCard(placeNameInput, linkInput)
     .then ((dataNewCard) => {
-        console.log('resultCreateNewCard = ', dataNewCard);
         const theFistCard = placesList.firstChild;
         placesList.insertBefore(createCard(dataNewCard, deleteCard, likedCard, viewedImage, profileId, config), theFistCard);
     })

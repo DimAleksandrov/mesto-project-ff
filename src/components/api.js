@@ -13,7 +13,7 @@ const config = {
 
 function handleError(err) {
   // обрабатываем ошибку
-  console.log(err);
+  console.log('Ошибка. Запрос не выполнен: ', err);
 }
 
 function handleResponse(response) {
