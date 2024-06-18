@@ -1,4 +1,3 @@
-export {createCard, deleteCard, likedCard};
 import {deleteCardOnServer, addLikeOnServer, deleteLikeOnServer} from './api';
 import {openPopup, closePopup} from './modal';
 
@@ -48,8 +47,11 @@ function handleFormSubmitDeleteCard(placesItem, card, config) {
   deleteCardOnServer(card._id, config).then(() => {
     placesItem.remove();
   })
-  .finally (()=>{
+  .then (()=>{
     closePopup(popupTypeDeleteCard);
+  })
+  .catch ((err) => {
+    console.log(err);
   });
 }
 
@@ -63,16 +65,25 @@ function deleteCard(placesItem, card, config) {
 };
 
 function likedCard(likedButton, likeQuntity, card, config) {
-  likedButton.classList.toggle('card__like-button_is-active');
   if (likedButton.classList.contains('card__like-button_is-active')) {
-    addLikeOnServer(card.likes, likeQuntity, card._id, config)
-    .then((result) => {
-      likeQuntity.textContent = result.likes.length;
-  });
-  } else {
     deleteLikeOnServer(card._id, likeQuntity, config)
     .then((result) => {
+      likedButton.classList.remove('card__like-button_is-active');
       likeQuntity.textContent = result.likes.length;
-  });
+  })
+    .catch ((err) => {
+      console.log(err);
+    })
+  } else {
+    addLikeOnServer(card.likes, likeQuntity, card._id, config)
+    .then((result) => {
+      likedButton.classList.add('card__like-button_is-active');
+      likeQuntity.textContent = result.likes.length;
+    })
+    .catch ((err) => {
+      console.log(err);
+    })
   }
 };
+
+export {createCard, deleteCard, likedCard};

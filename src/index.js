@@ -39,6 +39,10 @@ const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 const popups = Array.from(document.querySelectorAll('.popup'));
 
+const popupButtonSaveAvatarLink = popupTypeAvatar.querySelector('.popup__button');
+const popupButtonSaveNewCard = popupTypeNewCard.querySelector('.popup__button');
+const popupButtonSaveProfil = popupTypeEdit.querySelector('.popup__button');
+
 let popup = '';
 let profilImageLink = '';
 let profileId = ''; 
@@ -49,7 +53,13 @@ loadData().then(([dataUserInformation, dataCards]) => {
     profilImage.style.backgroundImage = `url(${dataUserInformation.avatar})`;
     profileId = dataUserInformation._id;
     createCards(dataCards);
-});
+})
+.catch (handleError);
+
+function handleError(err) { 
+    // обрабатываем ошибку 
+    console.log('Ошибка. Запрос не выполнен: ', err); 
+}  
 
 function createCards(cardsArr) {
     cardsArr.forEach(function (elemCardsArr) {
@@ -68,48 +78,62 @@ function setInitialValues() {
 
 function handleFormSubmitProfil(evt) {
     evt.preventDefault();
-    const popupButton = popupTypeEdit.querySelector('.popup__button');
-    popupButton.textContent = 'Сохранение...';
-    profileTitle.textContent = nameInput.value;
-    profileDescription.textContent = jobInput.value;
+    //const popupButton = popupTypeEdit.querySelector('.popup__button');
+    popupButtonSaveProfil.textContent = 'Сохранение...';
     editProfil(profileTitle, profileDescription)
-    .finally (()=>{
+    .then (() => {
+        profileTitle.textContent = nameInput.value;
+        profileDescription.textContent = jobInput.value;
+    })
+    .then (()=>{
         closePopup(popupTypeEdit);
-        popupButton.textContent = 'Сохранить';
+        popupButtonSaveProfil.textContent = 'Сохранить';
+    })
+    .catch (handleError)
+    .finally (() => {
+        popupButtonSaveProfil.textContent = 'Сохранить';
     });
 };
 
 function handleFormSubmitAvatar(evt) {
     evt.preventDefault();
-    const popupButton = popupTypeAvatar.querySelector('.popup__button');
-    popupButton.textContent = 'Сохранение...';
+    // const popupButton = popupTypeAvatar.querySelector('.popup__button');
+    popupButtonSaveAvatarLink.textContent = 'Сохранение...';
     profilImageLink = avatarUrlInput.value;
     // checkImagelink(profilImageLink)
     // .then((result) => {
     //     console.log(result.ok);
     // });
-    editAvatar(profilImageLink).then((dataProfilImageLink) => {
+    editAvatar(profilImageLink)
+    .then((dataProfilImageLink) => {
         profilImage.style.backgroundImage = `url(${dataProfilImageLink.avatar})`;
     })
-    .finally (()=>{
+    .then (() => {
         closePopup(popupTypeAvatar);
-        popupButton.textContent = 'Сохранить';
+    })
+    .catch (handleError)
+    .finally (() => {
+        popupButtonSaveAvatarLink.textContent = 'Сохранить';
     });
 };
 
 function handleFormSubmitPlace(evt) {
     evt.preventDefault();
-    const popupButton = popupTypeNewCard.querySelector('.popup__button');
-    popupButton.textContent = 'Сохранение...';
+    //const popupButton = popupTypeNewCard.querySelector('.popup__button');
+    popupButtonSaveNewCard.textContent = 'Сохранение...';
     createNewCard(placeNameInput, linkInput)
     .then ((dataNewCard) => {
         const theFistCard = placesList.firstChild;
         placesList.insertBefore(createCard(dataNewCard, deleteCard, likedCard, viewedImage, profileId, config), theFistCard);
     })
-    .finally (()=>{
+    .then (() => {
         closePopup(popupTypeNewCard);
-        popupButton.textContent = 'Сохранить';
-    });
+        popupButtonSaveNewCard.textContent = 'Сохранить';
+    })
+    .catch (handleError)
+    .finally (() => {
+        popupButtonSaveNewCard.textContent = 'Сохранить';
+    })
     evt.target.reset();
 };
 

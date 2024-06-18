@@ -1,19 +1,9 @@
-export {config, getUserInformation, getCards, loadData, createNewCard, editProfil, editAvatar,
-        deleteCardOnServer, addLikeOnServer, deleteLikeOnServer, 
-        // checkImagelink
-};
-
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/wff-cohort-16',
   headers: {
       authorization: '94a91796-fbdf-4e14-9e38-9ff505a2733d',
       'Content-Type': 'application/json',
   }
-}
-
-function handleError(err) {
-  // обрабатываем ошибку
-  console.log('Ошибка. Запрос не выполнен: ', err);
 }
 
 function handleResponse(response) {
@@ -33,7 +23,6 @@ const getUserInformation = new Promise((resolve) => {
       .then((result) => {
           resolve(result);
       })
-      .catch (handleError)
 })
 
 const getCards = new Promise((resolve) => {
@@ -44,12 +33,10 @@ const getCards = new Promise((resolve) => {
       .then((result) => {
           resolve(result);
       })
-      .catch(handleError)
 })
 
 function loadData() {
   return Promise.all([getUserInformation, getCards])
-  .catch(handleError)
 }
 
 
@@ -63,7 +50,6 @@ function editProfil(profileTitle, profileDescription) {
       })
   })
   .then(handleResponse)
-  .catch(handleError)
 };
 
 
@@ -77,7 +63,6 @@ function createNewCard(placeNameInput, linkInput) {
       })
   })
   .then(handleResponse)
-  .catch(handleError)
 }
 
 // function checkImagelink(profilImageLink) {
@@ -88,7 +73,7 @@ function createNewCard(placeNameInput, linkInput) {
 //       }
 //   })
 //   .then(handleResponse)
-//   .catch(handleError)
+
 // };
 
 function editAvatar(profilImageLink) {
@@ -100,7 +85,6 @@ function editAvatar(profilImageLink) {
       })
   })
   .then(handleResponse)
-  .catch(handleError)
 };
 
 function deleteCardOnServer(cardId, config) {
@@ -109,7 +93,6 @@ function deleteCardOnServer(cardId, config) {
     headers: config.headers
   })
   .then(handleResponse)
-  .catch(handleError)
 }
 
 //PUT https://nomoreparties.co/v1/cohortId/cards/likes/cardId
@@ -120,7 +103,6 @@ function addLikeOnServer(likeArr, likeQunt, cardId, config) {
     body: JSON.stringify(likeArr)
   })
   .then(handleResponse)
-  .catch(handleError)
 }
 
 //DELETE https://nomoreparties.co/v1/cohortId/cards/likes/cardId
@@ -130,5 +112,9 @@ function deleteLikeOnServer(cardId, likeQunt, config) {
     headers: config.headers
   })
   .then(handleResponse)
-  .catch(handleError)
 }
+
+export {config, getUserInformation, getCards, loadData, createNewCard, editProfil, editAvatar,
+  deleteCardOnServer, addLikeOnServer, deleteLikeOnServer, 
+  // checkImagelink
+};
