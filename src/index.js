@@ -3,6 +3,7 @@ import {createCard, deleteCard, likedCard} from './components/card';
 import {openPopup, closePopup, closeOnBackDropClick} from './components/modal';
 import {enableValidation, clearValidation} from './components/validation';
 import {config, loadData, createNewCard, editProfil, editAvatar, checkImagelink} from './components/api';
+import {handleSubmit} from './components/utils'
 
 // const token = '94a91796-fbdf-4e14-9e38-9ff505a2733d';
 // const webSite = 'https://nomoreparties.co/v1/wff-cohort-16';
@@ -39,10 +40,6 @@ const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 const popups = Array.from(document.querySelectorAll('.popup'));
 
-const popupButtonSaveAvatarLink = popupTypeAvatar.querySelector('.popup__button');
-const popupButtonSaveNewCard = popupTypeNewCard.querySelector('.popup__button');
-const popupButtonSaveProfil = popupTypeEdit.querySelector('.popup__button');
-
 let popup = '';
 let profilImageLink = '';
 let profileId = ''; 
@@ -77,64 +74,52 @@ function setInitialValues() {
 };
 
 function handleFormSubmitProfil(evt) {
-    evt.preventDefault();
-    //const popupButton = popupTypeEdit.querySelector('.popup__button');
-    popupButtonSaveProfil.textContent = 'Сохранение...';
-    editProfil(profileTitle, profileDescription)
-    .then (() => {
-        profileTitle.textContent = nameInput.value;
-        profileDescription.textContent = jobInput.value;
-    })
-    .then (()=>{
-        closePopup(popupTypeEdit);
-        popupButtonSaveProfil.textContent = 'Сохранить';
-    })
-    .catch (handleError)
-    .finally (() => {
-        popupButtonSaveProfil.textContent = 'Сохранить';
-    });
+    function makeRequest() {
+        return editProfil(profileTitle, profileDescription)
+        .then (() => {
+            profileTitle.textContent = nameInput.value;
+            profileDescription.textContent = jobInput.value;
+        })
+        .then (()=>{
+            closePopup(popupTypeEdit);
+        })
+        .catch (handleError)
+    }
+    handleSubmit(makeRequest, evt);
 };
 
 function handleFormSubmitAvatar(evt) {
-    evt.preventDefault();
-    // const popupButton = popupTypeAvatar.querySelector('.popup__button');
-    popupButtonSaveAvatarLink.textContent = 'Сохранение...';
     profilImageLink = avatarUrlInput.value;
     // checkImagelink(profilImageLink)
     // .then((result) => {
     //     console.log(result.ok);
     // });
-    editAvatar(profilImageLink)
-    .then((dataProfilImageLink) => {
-        profilImage.style.backgroundImage = `url(${dataProfilImageLink.avatar})`;
-    })
-    .then (() => {
-        closePopup(popupTypeAvatar);
-    })
-    .catch (handleError)
-    .finally (() => {
-        popupButtonSaveAvatarLink.textContent = 'Сохранить';
-    });
+    function makeRequest() {
+        return editAvatar(profilImageLink)
+        .then((dataProfilImageLink) => {
+            profilImage.style.backgroundImage = `url(${dataProfilImageLink.avatar})`;
+        })
+        .then (() => {
+            closePopup(popupTypeAvatar);
+        })
+        .catch (handleError);
+    }
+    handleSubmit(makeRequest, evt);
 };
 
 function handleFormSubmitPlace(evt) {
-    evt.preventDefault();
-    //const popupButton = popupTypeNewCard.querySelector('.popup__button');
-    popupButtonSaveNewCard.textContent = 'Сохранение...';
-    createNewCard(placeNameInput, linkInput)
-    .then ((dataNewCard) => {
-        const theFistCard = placesList.firstChild;
-        placesList.insertBefore(createCard(dataNewCard, deleteCard, likedCard, viewedImage, profileId, config), theFistCard);
-    })
-    .then (() => {
-        closePopup(popupTypeNewCard);
-        popupButtonSaveNewCard.textContent = 'Сохранить';
-    })
-    .catch (handleError)
-    .finally (() => {
-        popupButtonSaveNewCard.textContent = 'Сохранить';
-    })
-    evt.target.reset();
+    function makeRequest() {
+        return createNewCard(placeNameInput, linkInput)
+        .then ((dataNewCard) => {
+            const theFistCard = placesList.firstChild;
+            placesList.insertBefore(createCard(dataNewCard, deleteCard, likedCard, viewedImage, profileId, config), theFistCard);
+        })
+        .then (() => {
+            closePopup(popupTypeNewCard);
+        })
+        .catch (handleError);
+    }
+    handleSubmit(makeRequest, evt);
 };
 
 function viewedImage(cardImage, cardTitle) {

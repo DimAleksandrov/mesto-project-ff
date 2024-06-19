@@ -1,4 +1,4 @@
-  function closeByEscape(evt) {
+function closeByEscape(evt) {
   if (evt.key === 'Escape') {
     const openedPopup = document.querySelector('.popup_is-opened'); //<==нашли открытый попап
     closePopup(openedPopup);// <== закрыли попап с помощью функции `closePopup` ==
@@ -29,6 +29,6 @@ function closeOnBackDropClick({currentTarget, target }) {
       isClickedOnBackDrop = false;
   };
   return isClickedOnBackDrop;
-  };
+};
 
-  export { openPopup, closePopup, closeOnBackDropClick };
+export { openPopup, closePopup, closeOnBackDropClick};
