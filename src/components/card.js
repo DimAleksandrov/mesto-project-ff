@@ -1,9 +1,6 @@
 import {deleteCardOnServer, addLikeOnServer, deleteLikeOnServer} from './api';
-import {openPopup, closePopup} from './modal';
 
 const cardTemplate = document.querySelector('#card-template').content;
-const popupTypeDeleteCard = document.querySelector('.popup_type_delete-card');
-const submitButtonDeleteCard = popupTypeDeleteCard.querySelector('.popup__button')
 
 function createCard(card, deleteCard, likedCard, viewedImage, profilId, config) {
   const placesItem = cardTemplate.querySelector('.places__item').cloneNode(true);
@@ -47,33 +44,11 @@ function createCard(card, deleteCard, likedCard, viewedImage, profilId, config) 
 
 // @todo: Функция удаления карточки
 function deleteCard(placesItem, card, config) {
-  //openPopup(popupTypeDeleteCard);
-  // function handleFormSubmitDeleteCard(evt) {
-  //   evt.preventDefault();
-  //   deleteCardOnServer(card._id, config)
-  //   .then(() => {
-  //     placesItem.remove();
-  //   })
-  //   .then (()=>{
-  //     closePopup(popupTypeDeleteCard);
-  //   })
-  //   .catch ((err) => {
-  //     console.log(err);
-  //   })
-  // }
-  // console.log ('flag= ', flag)
-  // if (flag) {
-  //   submitButtonDeleteCard.removeEventListener('click', handleFormSubmitDeleteCard);
-  // } else {
-  //   submitButtonDeleteCard.addEventListener('click', handleFormSubmitDeleteCard);
-  // }
+ 
 
 deleteCardOnServer(card._id, config)
   .then(() => {
     placesItem.remove();
-  })
-  .then (()=>{
-    closePopup(popupTypeDeleteCard);
   })
   .catch ((err) => {
     console.log(err);
