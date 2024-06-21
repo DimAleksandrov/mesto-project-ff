@@ -2,45 +2,42 @@ import './pages/index.css';
 import {createCard, deleteCard, likedCard} from './components/card';
 import {openPopup, closePopup, closeOnBackDropClick} from './components/modal';
 import {enableValidation, clearValidation} from './components/validation';
-import {config, loadData, createNewCard, editProfil, editAvatar, checkImagelink} from './components/api';
+import {config, loadData, createNewCard, editProfil, editAvatar} from './components/api';
 import {handleSubmit} from './components/utils'
+import {
+    validationConfig,
+    placesList,
+    profileEditProfil,
+    profileAddPlace,
+    popupTypeEdit,
+    popupTypeAvatar,
+    popupTypeNewCard,
+    popupTypeImage,
+    profileForm,
+    avatarForm,
+    newPlaceForm,
+    nameInput,
+    jobInput,
+    avatarUrlInput,
+    placeNameInput,
+    linkInput,
+    profileTitle,
+    profileDescription,
+    profilImage,
+    popupImage,
+    popupCaption,
+    popups,
+} from './components/utils/constants'
 
 // const token = '94a91796-fbdf-4e14-9e38-9ff505a2733d';
 // const webSite = 'https://nomoreparties.co/v1/wff-cohort-16';
 
-const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-};
+const cardMethods = {
+    deleteCard, 
+    likedCard, 
+    viewedImage
+}
 
-const placesList = document.querySelector('.places__list');
-const profileEditProfil = document.querySelector('.profile__edit-button');
-const profileAddPlace = document.querySelector('.profile__add-button');
-const popupTypeEdit = document.querySelector('.popup_type_edit');
-const popupTypeAvatar = document.querySelector('.popup_type_avatar');
-const popupTypeNewCard = document.querySelector('.popup_type_new-card');
-const popupTypeImage = document.querySelector('.popup_type_image');
-const closePopupButtons = document.querySelectorAll('.popup__close');
-const formElement = document.forms.edit_profile;
-const formElementAvatar = document.forms.new_avatar;
-const formElementNewPlace = document.forms.new_place;
-const nameInput = formElement.elements.name;
-const jobInput = formElement.elements.description;
-const avatarUrlInput = formElementAvatar.elements.avatar_link
-const placeNameInput = formElementNewPlace.elements.place_name;
-const linkInput = formElementNewPlace.elements.link;
-const profileTitle = document.querySelector('.profile__title');
-const profileDescription = document.querySelector('.profile__description');
-const profilImage = document.querySelector('.profile__image');
-const popupImage = document.querySelector('.popup__image');
-const popupCaption = document.querySelector('.popup__caption');
-const popups = Array.from(document.querySelectorAll('.popup'));
-
-let popup = '';
 let profilImageLink = '';
 let profileId = ''; 
 
@@ -58,19 +55,24 @@ function handleError(err) {
     console.log('Ошибка. Запрос не выполнен: ', err); 
 }  
 
-function createCards(cardsArr) {
-    cardsArr.forEach(function (elemCardsArr) {
-        const card = createCard(elemCardsArr, deleteCard, likedCard, viewedImage, profileId, config);
-        placesList.append(card);
+function createCards(cardsElements, method = "append") {
+    cardsElements.forEach(function (card) {
+        const cardElement = createCard(card, profileId, cardMethods, config);
+        placesList[ method ](cardElement)
     });
 }
 
-function setInitialValues() {
+function fillProfileInputs() {
     nameInput.value = profileTitle.textContent;
     jobInput.value = profileDescription.textContent;
-    avatarUrlInput.value = '';
-    placeNameInput.value = '';
-    linkInput.value = '';
+};
+
+function clearAvatarFormInputs() {
+    avatarForm.reset();
+};
+
+function clearNewCardFormInputs() {
+    newPlaceForm.reset();
 };
 
 function handleFormSubmitProfil(evt) {
@@ -79,30 +81,20 @@ function handleFormSubmitProfil(evt) {
         .then (() => {
             profileTitle.textContent = nameInput.value;
             profileDescription.textContent = jobInput.value;
-        })
-        .then (()=>{
             closePopup(popupTypeEdit);
         })
-        .catch (handleError)
     }
     handleSubmit(makeRequest, evt);
 };
 
 function handleFormSubmitAvatar(evt) {
     profilImageLink = avatarUrlInput.value;
-    // checkImagelink(profilImageLink)
-    // .then((result) => {
-    //     console.log(result.ok);
-    // });
     function makeRequest() {
         return editAvatar(profilImageLink)
         .then((dataProfilImageLink) => {
             profilImage.style.backgroundImage = `url(${dataProfilImageLink.avatar})`;
-        })
-        .then (() => {
             closePopup(popupTypeAvatar);
         })
-        .catch (handleError);
     }
     handleSubmit(makeRequest, evt);
 };
@@ -112,18 +104,14 @@ function handleFormSubmitPlace(evt) {
         return createNewCard(placeNameInput, linkInput)
         .then ((dataNewCard) => {
             const theFistCard = placesList.firstChild;
-            placesList.insertBefore(createCard(dataNewCard, deleteCard, likedCard, viewedImage, profileId, config), theFistCard);
-        })
-        .then (() => {
+            placesList.insertBefore(createCard(dataNewCard, profileId, cardMethods, config), theFistCard);
             closePopup(popupTypeNewCard);
         })
-        .catch (handleError);
     }
     handleSubmit(makeRequest, evt);
 };
 
 function viewedImage(cardImage, cardTitle) {
-    popup = popupTypeImage;
     openPopup(popupTypeImage);
     popupImage.src = cardImage.src;
     popupImage.alt = cardImage.alt;
@@ -135,45 +123,41 @@ popups.forEach((elem) => {
 });
 
 profileEditProfil.addEventListener('click', function () {
-    popup = popupTypeEdit;
-    openPopup(popup);
-    setInitialValues();
-    clearValidation(popup, validationConfig);
+    openPopup(popupTypeEdit);
+    fillProfileInputs();
+    clearValidation(popupTypeEdit, validationConfig);
 });
 
 profilImage.addEventListener('click', function () {
-    popup = popupTypeAvatar;
-    openPopup(popup);
-    setInitialValues();
-    clearValidation(popup, validationConfig);
+    openPopup(popupTypeAvatar);
+    clearAvatarFormInputs();
+    clearValidation(popupTypeAvatar, validationConfig);
 });
 
 profileAddPlace.addEventListener('click', function () {
-    popup = popupTypeNewCard;
-    openPopup(popup);
-    setInitialValues();
-    clearValidation(popup, validationConfig);
+    openPopup(popupTypeNewCard);
+    clearNewCardFormInputs();
+    clearValidation(popupTypeAvatar, validationConfig);
 });
 
-closePopupButtons.forEach(button => {
-    const popup = button.closest('.popup');
-    button.addEventListener('click', () =>{
-        closePopup(popup);
-    });    
-});
-
-popups.forEach((elem) => {
-    elem.addEventListener('click', function(event) {
-        if (closeOnBackDropClick(event)) {
-            closePopup(elem);
+popups.forEach((popup) => {
+    popup.addEventListener('mousedown', (evt) => {
+        if (evt.target.classList.contains('popup_opened')) {
+            closePopup(popup)
         }
-    });
-});
+        if (evt.target.classList.contains('popup__close')) {
+          closePopup(popup)
+        }
+        if (evt.currentTarget === evt.target) {
+          closePopup(popup);
+        }
+    })
+})
 
 enableValidation(validationConfig);
 
-formElement.addEventListener('submit', handleFormSubmitProfil);
+profileForm.addEventListener('submit', handleFormSubmitProfil);
 
-formElementAvatar.addEventListener('submit', handleFormSubmitAvatar)
+avatarForm.addEventListener('submit', handleFormSubmitAvatar)
 
-formElementNewPlace.addEventListener('submit', handleFormSubmitPlace);
+newPlaceForm.addEventListener('submit', handleFormSubmitPlace);

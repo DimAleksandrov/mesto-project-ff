@@ -17,18 +17,4 @@ function closePopup(popupElement) {
   document.removeEventListener('keydown', closeByEscape);
 }
 
-//Функция закрытия popup при клике на overlay
-function closeOnBackDropClick({currentTarget, target }) {
-  const dialog = currentTarget;
-  let isClickedOnBackDrop = false;
-
-  if (dialog === target) {
-      
-      isClickedOnBackDrop = true;
-  } else {
-      isClickedOnBackDrop = false;
-  };
-  return isClickedOnBackDrop;
-};
-
-export { openPopup, closePopup, closeOnBackDropClick};
+export { openPopup, closePopup};

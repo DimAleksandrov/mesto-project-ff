@@ -55,6 +55,11 @@ function setEventListeners (formElement, validatSettings) {
   const inputList = Array.from(formElement.querySelectorAll(validatSettings.inputSelector));
   const buttonElement = formElement.querySelector(validatSettings.submitButtonSelector);
   toggleButtonState(inputList, buttonElement, validatSettings);
+
+  // formElement.addEventListener('reset', () => {
+  //   disableButton(submitButton, settings)
+  // });
+
   inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', function () {
       checkInputValidity(formElement, inputElement, validatSettings);
@@ -64,7 +69,6 @@ function setEventListeners (formElement, validatSettings) {
 };
 
 function enableValidation(validatSettings) {
-  // validationsSettings = validatSettings;
   const formList = Array.from(document.querySelectorAll(validatSettings.formSelector));
   formList.forEach((formElement) => {
     setEventListeners(formElement, validatSettings);
@@ -75,9 +79,9 @@ function enableValidation(validatSettings) {
 function clearValidation(formElement, validatSettings ) {
   const inputList = Array.from(formElement.querySelectorAll(validatSettings.inputSelector));
   const buttonElement = formElement.querySelector(validatSettings.submitButtonSelector);
+  toggleButtonState(inputList, buttonElement, validatSettings);
   inputList.forEach((inputElement) => {
       hideInputError(formElement, inputElement, validatSettings);
-      toggleButtonState(inputList, buttonElement, validatSettings);
   });
 };
 

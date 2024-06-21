@@ -1,28 +1,34 @@
 import {deleteCardOnServer, addLikeOnServer, deleteLikeOnServer} from './api';
 
+
 const cardTemplate = document.querySelector('#card-template').content;
 
-function createCard(card, deleteCard, likedCard, viewedImage, profilId, config) {
+//function createCard(card, deleteCard, likedCard, viewedImage, profilId, config) {
+function createCard(card, profileId, cardMethods, config) {
   const placesItem = cardTemplate.querySelector('.places__item').cloneNode(true);
   const cardImage = placesItem.querySelector('.card__image');
   const cardTitle = placesItem.querySelector('.card__title');
   const deleteButton = placesItem.querySelector('.card__delete-button');
   const likedButton = placesItem.querySelector('.card__like-button');
   const likeQuntity = placesItem.querySelector('.card__like-quantity');
+
+  const deleteCard = cardMethods.deleteCard;
+  const likedCard = cardMethods.likedCard;
+  const viewedImage = cardMethods.viewedImage; 
   
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardTitle.textContent = card.name;
   likeQuntity.textContent = card.likes.length;
 
-  if (card.owner._id === profilId) {
+  if (card.owner._id === profileId) {
     deleteButton.classList.remove('delete-button-hidden');
   } else {
     deleteButton.classList.add('delete-button-hidden');
   } 
 
   card.likes.forEach((like) => {
-    if (profilId === like._id) {
+    if (profileId === like._id) {
       likedButton.classList.add('card__like-button_is-active');
     }
   });
@@ -44,15 +50,13 @@ function createCard(card, deleteCard, likedCard, viewedImage, profilId, config) 
 
 // @todo: Функция удаления карточки
 function deleteCard(placesItem, card, config) {
- 
-
-deleteCardOnServer(card._id, config)
-  .then(() => {
-    placesItem.remove();
-  })
-  .catch ((err) => {
-    console.log(err);
-  })
+  deleteCardOnServer(card._id, config)
+    .then(() => {
+      placesItem.remove();
+    })
+    .catch ((err) => {
+      console.log(err);
+    })
 };
 
 function likedCard(likedButton, likeQuntity, card, config) {
