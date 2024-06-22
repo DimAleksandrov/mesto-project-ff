@@ -38,20 +38,19 @@ function loadData() {
 
 
 function editProfil(profileTitle, profileDescription) {
-  return fetch(`${config.baseUrl}/users/me`, {
+  return request(`${config.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: config.headers,
       body: JSON.stringify({
-          name: profileTitle.textContent,
-          about: profileDescription.textContent
+          name: profileTitle,
+          about: profileDescription
       })
   })
-  .then(handleResponse)
 };
 
 
 function createNewCard(placeNameInput, linkInput) {
-  return fetch(`${config.baseUrl}/cards`, {
+  return request(`${config.baseUrl}/cards`, {
       method: 'POST',
       headers: config.headers,
       body: JSON.stringify({
@@ -59,47 +58,43 @@ function createNewCard(placeNameInput, linkInput) {
           link: linkInput.value,
       })
   })
-  .then(handleResponse)
 }
 
 function editAvatar(profilImageLink) {
-  return fetch(`${config.baseUrl}/users/me/avatar`, {
+  return request(`${config.baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: config.headers,
       body: JSON.stringify({
           avatar: profilImageLink
       })
   })
-  .then(handleResponse)
 };
 
 function deleteCardOnServer(cardId, config) {
-  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+  return request(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
   })
-  .then(handleResponse)
 }
 
 //PUT https://nomoreparties.co/v1/cohortId/cards/likes/cardId
 function addLikeOnServer(likeArr, likeQunt, cardId, config) {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+  return request(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers,
     body: JSON.stringify(likeArr)
   })
-  .then(handleResponse)
 }
 
 //DELETE https://nomoreparties.co/v1/cohortId/cards/likes/cardId
 function deleteLikeOnServer(cardId, likeQunt, config) {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+  return request(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
   })
-  .then(handleResponse)
 }
 
-export {config, getUserInformation, getCards, loadData, createNewCard, editProfil, editAvatar,
+export {
+  config, getUserInformation, getCards, loadData, createNewCard, editProfil, editAvatar,
   deleteCardOnServer, addLikeOnServer, deleteLikeOnServer, 
 };

@@ -77,10 +77,12 @@ function clearNewCardFormInputs() {
 
 function handleFormSubmitProfil(evt) {
     function makeRequest() {
-        return editProfil(profileTitle, profileDescription)
+        return editProfil(nameInput.value, jobInput.value)
         .then (() => {
             profileTitle.textContent = nameInput.value;
             profileDescription.textContent = jobInput.value;
+        })
+        .then (()=>{
             closePopup(popupTypeEdit);
         })
     }
@@ -137,14 +139,11 @@ profilImage.addEventListener('click', function () {
 profileAddPlace.addEventListener('click', function () {
     openPopup(popupTypeNewCard);
     clearNewCardFormInputs();
-    clearValidation(popupTypeAvatar, validationConfig);
+    clearValidation(popupTypeNewCard, validationConfig);
 });
 
 popups.forEach((popup) => {
     popup.addEventListener('mousedown', (evt) => {
-        if (evt.target.classList.contains('popup_opened')) {
-            closePopup(popup)
-        }
         if (evt.target.classList.contains('popup__close')) {
           closePopup(popup)
         }

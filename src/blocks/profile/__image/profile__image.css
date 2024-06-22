@@ -28,6 +28,8 @@
   width: 120px;
   inset-block-start: 0px;
   inset-block-end: 0px;
+  inset-inline-start: 0px;
+  inset-inline-end: 0px;
   opacity: 0;
 }
 
@@ -46,5 +48,19 @@
 @media screen and (max-width: 480px) {
   .profile__image {
     margin-right: 0;
+  }
+
+  .profile__image:before {
+    width: 26px;
+    height: 26px;
+    inset-block-start: 85px;
+    inset-inline: auto;
+  }
+  
+  .profile__image:after {
+    width: 100%;
+    height: 120px;
+    opacity: 0;
+    inset-block-start: 42px;
   }
 }
